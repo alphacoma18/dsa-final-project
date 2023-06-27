@@ -9,49 +9,15 @@
 
 Program::Program() = default;
 Program::~Program() = default;
+
 void Program::displayMenu() const
 {
     std::cout << "Please select an option:" << std::endl;
     for (auto const &choice : choices)
         std::cout << choice.first << ". " << choice.second << std::endl;
 }
-void Program::prompt() const
-{
-    Program::displayMenu();
-    // int selection = -1;
-    // try
-    // {
-    //     Program::promptChoices(selection, 6, "Enter your choice: ");
-    //     switch (selection)
-    //     {
-    //     case 1:
-    //         _videoStore->addVideo();
-    //         break;
-    //     case 2:
-    //         _videoStore->rentVideo();
-    //         break;
-    //     case 3:
-    //         _videoStore->returnVideo();
-    //         break;
-    //     case 4:
-    //         _videoStore->getVideos();
-    //         break;
-    //     case 5:
-    //         _videoStore->getVideo().getCopyCount();
-    //         break;
-    //     case 6:
-            
-    //     case 7:
-    //         std::cout << "Exiting..." << std::endl;
-    //         break;
-    //     }
-    // }
-    // catch (const std::exception &e)
-    // {
-    //     std::cerr << e.what() << '\n';
-    // }
-}
-void Program::promptChoices(int &selection, int max = 0, std::string message = "")
+
+void Program::promptChoices(int &selection, int max, std::string message) const
 {
     try
     {
@@ -67,26 +33,117 @@ void Program::promptChoices(int &selection, int max = 0, std::string message = "
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         promptChoices(selection, max, message);
     }
-}
+};
+
+void Program::promptInt(int &input, std::string message) const
+{
+    try
+    {
+        std::cout << message;
+        std::cin >> input;
+        if (input < 0)
+            throw std::invalid_argument("Invalid input.");
+    }
+    catch (const std::exception &e)
+    {
+        std::cout << e.what() << std::endl;
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        promptInt(input, message);
+    }
+};
+void Program::promptString(std::string &input, std::string message) const
+{
+    try
+    {
+        std::cout << message;
+        std::getline(std::cin, input);
+        if (input.empty())
+            throw std::invalid_argument("Invalid input.");
+    }
+    catch (const std::exception &e)
+    {
+        std::cout << e.what() << std::endl;
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        promptString(input, message);
+    }
+};
+void Program::prompt() const
+{
+    Program::displayMenu();
+    int selection = -1;
+    char selectAgain = 'Y';
+    Program::promptChoices(selection, choices.size(), "Enter your choice: ");
+    std::string title = "", genre = "", production = "";
+    int copyCount = 0;
+    do
+    {
+        switch (selection)
+        {
+        case 1:
+            std::cout << "Enter the video details:\n";
+            Program::promptString(title, "Title: ");
+            Program::promptString(genre, "Genre: ");
+            Program::promptString(production, "Production: ");
+            Program::promptInt(copyCount, "Copy Count: ");
+            Video *video = new Video(title, genre, production, copyCount);
+            _videoStore->addVideo(*video);
+            break;
+        case 2:
+            int id = 0;
+            promptInt(id, "Enter the video ID: ");
+            _videoStore->rentVideo(id);
+            break;
+        case 3:
+            int id = 0;
+            promptInt(id, "Enter the video ID: ");
+            _videoStore->returnVideo(id);
+            break;
+        case 4:
+            int id = 0;
+            promptInt(id, "Enter the video ID: ");
+            Video *video = _videoStore->getVideo(id);
+            std::cout << "Title: " << video->getTitle() << "\n";
+            std::cout << "Genre: " << video->getGenre() << "\n";
+            std::cout << "Production: " << video->getProduction() << "\n";
+            std::cout << "Copy Count: " << video->getCopyCount() << "\n";
+            break;
+        case 5:
+            _videoStore->getVideos();
+            break;
+        case 6:
+            int id = 0;
+            promptInt(id, "Enter the video ID: ");
+            int count = _videoStore->getVideo(id)->getCopyCount();
+            if (count > 0)
+                std::cout << "Video is available.\n";
+            else
+                std::cout << "Video is not available.\n";
+        case 7:
+            // switch(int choice){
+            // case 1:
+                // processAccount
+            // case 2:
+            // case 3:
+            // default:
+            //}
+            case 8:
+            std::cout << "Thank you for using the program!\n";
+            for (auto const &member : _members)
+                    std::cout
+                << "- " << member << "\n";
+            break;
+        }
+    } while (selection != 8);
+};
+
 void Program::loadVideos() const
 {
-    // std::ifstream file(_paths.customers);
-    // std::string line = "";
-    // std::vector<Video> videos = {};
-    // while (std::getline(file, line))
-    // {
-    //     std::getline(file, line);
-    //     std::string title = line;
-    //     std::getline(file, line);
-    //     std::string genre = line;
-    //     std::string production = line;
-    //     std::getline(file, line);
-    //     int copyCount = std::stoi(line);
-    //     Video video = Video(title, genre, production, copyCount);
-    //     videos.push_back(video);
-    // }
-    // *_videoStore = VideoStore(videos);
-};
+    std::ifstream file(videosPath);
+    std::string line = "";
+    // _videoStore
+}
 void Program::init() const
 {
     std::cout << "Welcome to the video store!" << std::endl;

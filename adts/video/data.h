@@ -9,7 +9,7 @@ private:
     const std::string _title = "";
     const std::string _genre = "";
     const std::string _production = "";
-    int copyCount = 0;
+    int _copyCount = 0;
     Video *_next = nullptr;
     Video *_prev = nullptr;
 
@@ -20,6 +20,7 @@ public:
     Video *getPrev() const;
     Video *setNext(Video *next);
     Video *setPrev(Video *prev);
+
     std::string getTitle() const;
     std::string getGenre() const;
     std::string getProduction() const;

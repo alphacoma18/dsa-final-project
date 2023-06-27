@@ -12,6 +12,7 @@ protected:
     static int _id;
     std::string _name = "";
     std::string _address = "";
+    int customerCount = 0;
 
 public:
     BaseCustomer();
@@ -38,6 +39,8 @@ private:
     std::string _rentalPath = "rentals.txt";
     std::queue<Customer *>
         _customerQueue = {};
+    bool _isEmpty() const;
+    int _customerCount();
 
 public:
     Customer *getCustomer(int id);

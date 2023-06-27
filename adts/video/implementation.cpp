@@ -1,6 +1,6 @@
 #include "data.h"
 
-Video::Video(std::string title, std::string genre, std::string production, int copyCount) : _title(title), _genre(genre), _production(production), copyCount(copyCount)
+Video::Video(std::string title, std::string genre, std::string production, int copyCount) : _title(title), _genre(genre), _production(production), _copyCount(copyCount)
 {
     _id = ++_idCounter;
 }
@@ -25,17 +25,17 @@ std::string Video::getProduction() const
 
 int Video::getCopyCount() const
 {
-    return copyCount;
+    return _copyCount;
 }
 
 void Video::addCopy()
 {
-    ++copyCount;
+    ++_copyCount;
 }
 
 void Video::removeCopy()
 {
-    --copyCount;
+    --_copyCount;
 };
 Video *Video::getNext() const
 {

@@ -34,14 +34,35 @@ Customer::Customer(std::string name, std::string address) : BaseCustomer()
     _id++;
 }
 
-// git save ko lang
-//san mo balak ung inputs ilagay main?
-// mayroon sa Program class
-
 void Customer::rentVideo(int id)
 {
-    // TODO videoStore
     _rentedVideos.push(id);
+}
+void Customer::returnVideo(int id)
+{
+    if (_rentedVideos.size() == 0)
+    {
+        std::cout << "No videos rented" << std::endl;
+        return;
+    }
+    std::stack<int> temp = {};
+    while (_rentedVideos.size() != 0)
+    {
+        if (_rentedVideos.top() == id)
+        {
+            _rentedVideos.pop();
+            std::cout << "Video successfully returned" << std::endl;
+            return;
+        }
+        temp.push(_rentedVideos.top());
+        _rentedVideos.pop();
+    }
+    while (temp.size() != 0)
+    {
+        _rentedVideos.push(temp.top());
+        temp.pop();
+    }
+    std::cout << "Video not found" << std::endl;
 }
 std::string processAccount::getCustomerPath() const
 {
