@@ -2,41 +2,7 @@
 #include <map>
 #include <vector>
 #include <algorithm>
-
-class Video
-{
-private:
-    static int _idCounter;
-    int _id = 0;
-    const std::string _title = "";
-    const std::string _genre = "";
-    const std::string _production = "";
-    int copyCount = 0;
-
-public:
-    Video(std::string title, std::string genre, std::string production, int copyCount = 1);
-    int getId() const;
-    std::string getTitle() const;
-    std::string getGenre() const;
-    std::string getProduction() const;
-    int getCopyCount() const;
-    void addCopy();
-    void removeCopy();
-};
-
-class VideoStore
-{
-private:
-    std::map<int, Video> _videoMap = {};
-
-public:
-    VideoStore(std::vector<Video> videos);
-    Video getVideo(int id) const;
-    void addVideo(Video video);
-    int rentVideo(int id);
-    void returnVideo(int id) const;
-    void getVideos() const;
-};
+#include "./adts/videoStore/data.h"
 
 class Program
 {
@@ -58,6 +24,7 @@ private:
     };
     paths _paths = paths{};
     VideoStore *_videoStore = nullptr;
+
     void loadVideos() const;
     void promptChoices(int &selection, int max, std::string message);
     void prompt() const;
