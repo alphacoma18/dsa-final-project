@@ -37,4 +37,22 @@ void Video::removeCopy()
 {
     --copyCount;
 };
+Video *Video::getNext() const
+{
+    return _next;
+}
+Video *Video::getPrev() const
+{
+    return _prev;
+}
+Video *Video::setNext(Video *next)
+{
+    _next = next;
+    return _next;
+}
+Video *Video::setPrev(Video *prev)
+{
+    _prev = prev;
+    return _prev;
+}
 int Video::_idCounter = 0;

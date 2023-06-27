@@ -7,56 +7,76 @@
 #include <fstream>
 #include "data.h"
 
-VideoStore::VideoStore(std::vector<Video> videos)
+VideoStore::VideoStore(){};
+
+Video *VideoStore::getVideo(int id) const
 {
-    for (auto const &video : videos)
-        _videoMap.insert(std::pair<int, Video>(video.getId(), video));
-}
-Video VideoStore::getVideo(int id) const
-{
-    try
+    Video *curr = _head;
+    while (curr != nullptr)
     {
-        return _videoMap.at(id);
+        if (curr->getId() == id)
+            return curr;
+        curr = curr->getNext();
     }
-    catch (const std::out_of_range &e)
-    {
-        std::cout << "Video with id " << id << " not found." << std::endl;
-    }
+    return nullptr;
 }
 void VideoStore::addVideo(Video video)
 {
-    _videoMap.insert(std::pair<int, Video>(video.getId(), video));
+    if (_head == nullptr)
+    {
+        _head = new Video(video.getTitle(), video.getGenre(), video.getProduction(), video.getCopyCount());
+        _tail = _head;
+    }
+    else
+    {
+        Video *newVideo = new Video(video.getTitle(), video.getGenre(), video.getProduction(), video.getCopyCount());
+        _tail->setNext(newVideo);
+        newVideo->setPrev(_tail);
+        _tail = newVideo;
+    }
+    std::cout << "Video successfully added" << std::endl;
 }
 
 int VideoStore::rentVideo(int id)
 {
-    Video video = VideoStore::getVideo(id);
-    const bool copyExists = video.getCopyCount() > 0;
-    if (!copyExists)
+    Video *video = getVideo(id);
+    if (video == nullptr)
     {
-        std::cout << "No more copies of " << video.getTitle() << " available." << std::endl;
+        std::cout << "Video not found" << std::endl;
         return -1;
     }
-    video.removeCopy();
-    std::cout << "Successfully rented " << video.getTitle() << "." << std::endl;
-    return video.getId();
-}
+    if (video->getCopyCount() == 0)
+    {
+        std::cout << "No copies available" << std::endl;
+        return -1;
+    }
+    video->removeCopy();
+    _rentedVideos.push(video);
+    std::cout << "Video successfully rented" << std::endl;
+    return video->getId();
+};
 
 void VideoStore::returnVideo(int id) const
 {
-    try
+    Video *video = getVideo(id);
+    if (video == nullptr)
     {
-        Video video = VideoStore::getVideo(id);
-        video.addCopy();
+        std::cout << "Video not found" << std::endl;
+        return;
     }
-    catch (const std::out_of_range &e)
-    {
-        std::cout << "Video with id " << id << " not found." << std::endl;
-    }
+    video->addCopy();
+    std::cout << "Video successfully returned" << std::endl;
 }
 
 void VideoStore::getVideos() const
 {
-    for (auto const &video : _videoMap)
-        std::cout << video.second.getTitle() << " (" << video.second.getProduction() << ") - " << video.second.getCopyCount() << " copies available." << std::endl;
+    Video *curr = _head;
+    while (curr != nullptr)
+    {
+        std::cout << "Video ID: " << curr->getId() << std::endl;
+        std::cout << "Title: " << curr->getTitle() << std::endl;
+        std::cout << "Genre: " << curr->getGenre() << std::endl;
+        std::cout << "Copies: " << curr->getCopyCount() << std::endl;
+        curr = curr->getNext();
+    }
 }

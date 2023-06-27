@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 #include <map>
 #include <vector>
@@ -16,13 +17,7 @@ private:
         {6, "Check Video Availability"},
         {7, "Customer Maintenance"},
         {8, "Exit"}};
-    struct paths
-    {
-        std::string videos = "videos.txt";
-        std::string customers = "customers.txt";
-        std::string rentals = "rentals.txt";
-    };
-    paths _paths = paths{};
+    std::string videosPath = "videos.txt";
     VideoStore *_videoStore = nullptr;
 
     void loadVideos() const;

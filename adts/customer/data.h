@@ -1,7 +1,10 @@
+#pragma once
 #include <iostream>
 #include <string>
 #include <map>
 #include <vector>
+#include <queue>
+#include <stack>
 
 class BaseCustomer
 {
@@ -9,12 +12,18 @@ protected:
     static int _id;
     std::string _name = "";
     std::string _address = "";
+
+public:
+    BaseCustomer();
+    int getId() const;
+    std::string getName() const;
+    std::string getAddress() const;
 };
 
 class Customer : public BaseCustomer
 {
 private:
-    std::vector<int> _rentedVideos = {};
+    std::stack<int> _rentedVideos = {};
 
 public:
     Customer(std::string name, std::string address);
@@ -22,12 +31,19 @@ public:
     void returnVideo(int id);
 };
 
-class processAccount{
-   private:
-   std::map<int, Customer> customerMap;
+class processAccount
+{
+private:
+    std::string _customerPath = "customers.txt";
+    std::string _rentalPath = "rentals.txt";
+    std::queue<Customer *>
+        _customerQueue = {};
 
-   public:
+public:
+    Customer *getCustomer(int id);
+    std::string getCustomerPath() const;
+    std::string getRentalPath() const;
     void addCustomer(std::string name, std::string address);
-    void showcustomerDetails(int customerID);
-    void printcustomerDetails();
-}
+    void printCustomerDetails(int customerID);
+    void saveCustomerDetails();
+};
