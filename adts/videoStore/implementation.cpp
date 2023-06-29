@@ -7,7 +7,8 @@
 #include <fstream>
 #include "data.h"
 
-VideoStore::VideoStore(){};
+// VideoStore::VideoStore() = default;
+// VideoStore::~VideoStore() = default;
 
 Video *VideoStore::getVideo(int id) const
 {
@@ -19,7 +20,8 @@ Video *VideoStore::getVideo(int id) const
         curr = curr->getNext();
     }
     return nullptr;
-}
+};
+
 void VideoStore::addVideo(Video video)
 {
     if (_head == nullptr)
@@ -35,7 +37,7 @@ void VideoStore::addVideo(Video video)
         _tail = newVideo;
     }
     std::cout << "Video successfully added" << std::endl;
-}
+};
 
 int VideoStore::rentVideo(int id)
 {
@@ -66,17 +68,22 @@ void VideoStore::returnVideo(int id) const
     }
     video->addCopy();
     std::cout << "Video successfully returned" << std::endl;
-}
+};
 
-void VideoStore::getVideos() const
-{
-    Video *curr = _head;
-    while (curr != nullptr)
-    {
-        std::cout << "Video ID: " << curr->getId() << std::endl;
-        std::cout << "Title: " << curr->getTitle() << std::endl;
-        std::cout << "Genre: " << curr->getGenre() << std::endl;
-        std::cout << "Copies: " << curr->getCopyCount() << std::endl;
-        curr = curr->getNext();
-    }
-}
+// void VideoStore::getVideos() const
+// {
+//     Video *curr = _head;
+//     if (_head == nullptr)
+//     {
+//         std::cout << "No videos available" << std::endl;
+//         return;
+//     }
+//     while (curr != nullptr)
+//     {
+//         std::cout << "Video ID: " << curr->getId() << std::endl;
+//         std::cout << "Title: " << curr->getTitle() << std::endl;
+//         std::cout << "Genre: " << curr->getGenre() << std::endl;
+//         std::cout << "Copies: " << curr->getCopyCount() << std::endl;
+//         curr = curr->getNext();
+//     }
+// };

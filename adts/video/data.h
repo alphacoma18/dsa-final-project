@@ -16,6 +16,7 @@ private:
 public:
     Video(std::string title, std::string genre, std::string production, int copyCount = 1);
     int getId() const;
+    
     Video *getNext() const;
     Video *getPrev() const;
     Video *setNext(Video *next);

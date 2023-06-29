@@ -1,9 +1,10 @@
 #pragma once
 #include <map>
 #include <vector>
-#include "../video/data.h"
 #include <string>
 #include <stack>
+#include "../video/data.h"
+
 class VideoStore
 {
 private:
@@ -13,10 +14,11 @@ private:
     std::stack<Video *> _rentedVideos = {};
 
 public:
-    VideoStore();
+    VideoStore(){};
+    ~VideoStore(){};
     Video *getVideo(int id) const;
     void addVideo(Video video);
     int rentVideo(int id);
     void returnVideo(int id) const;
-    void getVideos() const;
+    // void getVideos() const;
 };
