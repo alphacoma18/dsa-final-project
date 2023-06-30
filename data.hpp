@@ -3,8 +3,9 @@
 #include <map>
 #include <vector>
 #include <algorithm>
-#include "./adts/videoStore/data.h"
-#include "./adts/customerManager/data.h"
+#include "./adts/videoStore/data.hpp"
+#include "./adts/customerHandler/data.hpp"
+#include "./adts/rentalHandler/data.hpp"
 
 class BaseProgram
 {
@@ -32,12 +33,21 @@ private:
         {6, "Check Video Availability"},
         {7, "Customer Maintenance"},
         {8, "Exit"}};
-    VideoStore *_videoStore = new VideoStore();
-    CustomerManager *_customerManager = new CustomerManager();
+    std::map<int, std::string> _customerChoices = {
+        {1, "Add Customer"},
+        {2, "Show Customer Details"},
+        {3, "List of videos rented by customer"},
+        {4, "Back"}};
+
+    VideoStore *_videoStore = new VideoStore(_videosPath);
+    CustomerHandler *_customerHandler = new CustomerHandler();
+    RentalHandler *_rentalHandler = new RentalHandler();
     void loadVideos() const;
     void prompt();
     void displayMenu() const;
     void saveVideos();
+    void saveCustomers();
+    void saveRentals();
 
 public:
     Program();

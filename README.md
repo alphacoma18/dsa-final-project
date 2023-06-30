@@ -4,7 +4,6 @@
 
 ### Video Format
 
-<!-- Line 1: id -->
 Line 1: Movie Title
 Line 2: Genre
 Line 3: Production
@@ -27,6 +26,50 @@ Line 2: Video_ID (of all rented videos of a customer)
 2. Install the Code Runner extension
 3. Modify cpp map executor to `cd $dir && g++ *.cpp -o $fileNameWithoutExt && $dir$fileNameWithoutExt`
 4. Run the program from `main.cpp`
+
+## Database Implementation
+
+### Explanation
+
+Video, Customer, and Rental are the three tables used in the database. Customers and Rentals are in a one-to-many relationship. Video and Rental are in a many-to-many relationship. The Rental table is the bridge table between Video and Customer.
+
+### Codes
+
+#### Video
+
+```sql
+CREATE TABLE Video (
+    id INT NOT NULL AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    genre VARCHAR(255) NOT NULL,
+    production VARCHAR(255) NOT NULL,
+    copies INT NOT NULL,
+)
+```
+
+#### Rental
+
+```sql
+CREATE TABLE Rental (
+    id INT NOT NULL AUTO_INCREMENT,
+    customer_id INT NOT NULL,
+    video_id INT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (customer_id) REFERENCES customer(id),
+    FOREIGN KEY (video_id) REFERENCES video(id)
+)
+```
+
+#### Customer
+
+```sql
+CREATE TABLE Customer (
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+)
+```
 
 ## Members
 
