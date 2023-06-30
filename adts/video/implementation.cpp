@@ -1,3 +1,4 @@
+#include <iostream>
 #include "data.h"
 
 Video::Video(std::string title, std::string genre, std::string production, int copyCount) : _title(title), _genre(genre), _production(production), _copyCount(copyCount)

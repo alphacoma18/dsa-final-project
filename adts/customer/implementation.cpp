@@ -12,6 +12,7 @@ BaseCustomer::BaseCustomer()
 }
 BaseCustomer::~BaseCustomer() = default;
 
+
 int BaseCustomer::getId() const
 {
     return _id;
@@ -34,6 +35,8 @@ Customer::Customer(std::string name, std::string address) : BaseCustomer()
     _address = address;
     _id++;
 }
+
+Customer::~Customer() = default;
 
 void Customer::rentVideo(int id)
 {

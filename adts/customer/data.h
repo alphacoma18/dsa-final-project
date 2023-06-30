@@ -28,7 +28,7 @@ private:
 
 public:
     Customer(std::string name, std::string address);
-        
+    ~Customer();
     void rentVideo(int id);
     void returnVideo(int id);
 };

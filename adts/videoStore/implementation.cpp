@@ -7,9 +7,8 @@
 #include <fstream>
 #include "data.h"
 
-// VideoStore::VideoStore() = default;
-// VideoStore::~VideoStore() = default;
-
+VideoStore::VideoStore() = default;
+VideoStore::~VideoStore() = default;
 Video *VideoStore::getVideo(int id) const
 {
     Video *curr = _head;
@@ -72,14 +71,19 @@ Video *VideoStore::getHead() const
 void VideoStore::displayVideos() const
 {
     Video *curr = _head;
+    if (curr == nullptr)
+    {
+        std::cout << "No videos available\n";
+        return;
+    }
+    std::cout << "\n------------------ Videos ------------------\n\n";
     while (curr != nullptr)
     {
-        std::cout << "ID: " << curr->getId() << std::endl;
-        std::cout << "Title: " << curr->getTitle() << std::endl;
-        std::cout << "Genre: " << curr->getGenre() << std::endl;
-        std::cout << "Production: " << curr->getProduction() << std::endl;
-        std::cout << "Copy Count: " << curr->getCopyCount() << std::endl;
-        std::cout << std::endl;
+        std::cout << "ID: " << curr->getId() << "\n";
+        std::cout << "Title: " << curr->getTitle() << "\n";
+        std::cout << "Genre: " << curr->getGenre() << "\n";
+        std::cout << "Production: " << curr->getProduction() << "\n";
+        std::cout << "Copy Count: " << curr->getCopyCount() << "\n\n";
         curr = curr->getNext();
     }
 };

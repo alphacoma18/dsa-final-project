@@ -22,21 +22,17 @@ Customer *CustomerManager::getCustomer(int id)
     }
     
     Customer *customer = _customerQueue.front();
-
-    Customer *tempCustomer = new Customer(*customer);
-
-    _customerQueue.pop();
-    
-    while(!_customerQueue.empty()){
-        customer = _customerQueue.front();
+    if (customer->getId() == id)
+    {
         _customerQueue.pop();
-        
-        delete tempCustomer;
-
-        tempCustomer = new Customer(*customer);
-        
+        return customer;
     }
-    return tempCustomer;
+    else
+    {
+        _customerQueue.pop();
+        _customerQueue.push(customer);
+        return getCustomer(id);
+    }
     
 }
 

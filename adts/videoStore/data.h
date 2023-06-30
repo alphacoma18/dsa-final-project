@@ -14,8 +14,8 @@ private:
     std::stack<Video *> _rentedVideos = {};
 
 public:
-    VideoStore(){};
-    ~VideoStore(){};
+    VideoStore();
+    ~VideoStore();
     Video *getVideo(int id) const;
     void addVideo(Video *video);
     int rentVideo(int id);
