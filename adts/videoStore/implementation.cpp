@@ -22,21 +22,17 @@ Video *VideoStore::getVideo(int id) const
     return nullptr;
 };
 
-void VideoStore::addVideo(Video video)
+void VideoStore::addVideo(Video *video)
 {
     if (_head == nullptr)
     {
-        _head = new Video(video.getTitle(), video.getGenre(), video.getProduction(), video.getCopyCount());
-        _tail = _head;
+        _head = video;
+        _tail = video;
+        return;
     }
-    else
-    {
-        Video *newVideo = new Video(video.getTitle(), video.getGenre(), video.getProduction(), video.getCopyCount());
-        _tail->setNext(newVideo);
-        newVideo->setPrev(_tail);
-        _tail = newVideo;
-    }
-    std::cout << "Video successfully added" << std::endl;
+    _tail->setNext(video);
+    video->setPrev(_tail);
+    _tail = video;
 };
 
 int VideoStore::rentVideo(int id)
@@ -69,21 +65,21 @@ void VideoStore::returnVideo(int id) const
     video->addCopy();
     std::cout << "Video successfully returned" << std::endl;
 };
-
-// void VideoStore::getVideos() const
-// {
-//     Video *curr = _head;
-//     if (_head == nullptr)
-//     {
-//         std::cout << "No videos available" << std::endl;
-//         return;
-//     }
-//     while (curr != nullptr)
-//     {
-//         std::cout << "Video ID: " << curr->getId() << std::endl;
-//         std::cout << "Title: " << curr->getTitle() << std::endl;
-//         std::cout << "Genre: " << curr->getGenre() << std::endl;
-//         std::cout << "Copies: " << curr->getCopyCount() << std::endl;
-//         curr = curr->getNext();
-//     }
-// };
+Video *VideoStore::getHead() const
+{
+    return _head;
+};
+void VideoStore::displayVideos() const
+{
+    Video *curr = _head;
+    while (curr != nullptr)
+    {
+        std::cout << "ID: " << curr->getId() << std::endl;
+        std::cout << "Title: " << curr->getTitle() << std::endl;
+        std::cout << "Genre: " << curr->getGenre() << std::endl;
+        std::cout << "Production: " << curr->getProduction() << std::endl;
+        std::cout << "Copy Count: " << curr->getCopyCount() << std::endl;
+        std::cout << std::endl;
+        curr = curr->getNext();
+    }
+};

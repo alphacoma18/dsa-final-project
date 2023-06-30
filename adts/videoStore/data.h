@@ -17,8 +17,9 @@ public:
     VideoStore(){};
     ~VideoStore(){};
     Video *getVideo(int id) const;
-    void addVideo(Video video);
+    void addVideo(Video *video);
     int rentVideo(int id);
     void returnVideo(int id) const;
-    // void getVideos() const;
+    Video* getHead() const;
+    void displayVideos() const;
 };

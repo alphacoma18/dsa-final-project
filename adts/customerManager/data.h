@@ -10,12 +10,11 @@ private:
     std::string _rentalPath = "rentals.txt";
     std::queue<Customer *>
         _customerQueue = {};
-    bool _isEmpty() const;
-    int _customerCount() const;
+    int _customerCount = 0;
 
 public:
-    CustomerManager() = default;
-    ~CustomerManager() = default;
+    CustomerManager(){};
+    ~CustomerManager(){};
     Customer *getCustomer(int id);
     std::string getCustomerPath() const;
     std::string getRentalPath() const;

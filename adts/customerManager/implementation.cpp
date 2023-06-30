@@ -2,6 +2,9 @@
 #include <fstream>
 #include "data.h"
 
+// CustomerManager::CustomerManager() = default;
+// CustomerManager::~CustomerManager() = default;
+
 std::string CustomerManager::getCustomerPath() const
 {
     return _customerPath;
@@ -12,14 +15,31 @@ std::string CustomerManager::getRentalPath() const
 }
 Customer *CustomerManager::getCustomer(int id)
 {
-    if (_customerQueue.size() == 0)
+    if (_customerQueue.empty())
     {
         std::cout << "No customers in queue" << std::endl;
         return nullptr;
     }
+    
     Customer *customer = _customerQueue.front();
-    // TODO
+
+    Customer *tempCustomer = new Customer(*customer);
+
+    _customerQueue.pop();
+    
+    while(!_customerQueue.empty()){
+        customer = _customerQueue.front();
+        _customerQueue.pop();
+        
+        delete tempCustomer;
+
+        tempCustomer = new Customer(*customer);
+        
+    }
+    return tempCustomer;
+    
 }
+
 void CustomerManager::addCustomer(std::string name, std::string address)
 {
     Customer *customer = new Customer(name, address);
@@ -42,14 +62,16 @@ void CustomerManager::printCustomerDetails(int customerId)
 void CustomerManager::saveCustomerDetails()
 {
     std::ofstream outputFile(getCustomerPath());
-    if (outputFile.is_open())
+     if (outputFile.is_open())
     {
         Customer *customer = getCustomer(0);
         while (customer != nullptr)
         {
             outputFile << "-------------------------" << std::endl;
             outputFile << "Customer ID" << customer->getId() << std::endl;
-            outputFile << "Name: " << customer->getName() << std::endl;
+  
+    std::ofstream outputFile(getCustomerPath());
+             outputFile << "Name: " << customer->getName() << std::endl;
             outputFile << "Address: " << customer->getAddress() << std::endl;
             outputFile << "-------------------------" << std::endl;
             customer = getCustomer(customer->getId());

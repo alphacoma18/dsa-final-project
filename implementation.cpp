@@ -7,8 +7,8 @@
 #include <fstream>
 #include "data.h"
 
-// Program::Program() = default;
-// Program::~Program() = default;
+Program::Program() = default;
+Program::~Program() = default;
 
 void Program::displayMenu() const
 {
@@ -124,21 +124,7 @@ void Program::prompt() const
             //     std::cout << "Video is not available.\n";
             break;
         case 7:
-            // int choice = 0;
-            // std::string name = "";
-            // std::string address;
-            // switch (choice)
-            // {
-            // case 1:
-            //     std::cout << "Name: ";
-            //     std::cin >> name;
-            //     std::cout << "Address: ";
-            //     std::cin >> address;
-            //     account.addCustomer(name, address);
-            //     break;
-            // case 2:
-            //     // TODO
-            // }
+
             break;
         case 8:
             std::cout << "Thank you for using the program!\n";
@@ -150,12 +136,40 @@ void Program::prompt() const
     } while (selection != 8);
 };
 
-// void Program::loadVideos() const
-// {
-//     std::ifstream file(videosPath);
-//     std::string line = "";
-//     // _videoStore
-// };
+void Program::loadVideos() const
+{
+    // std::ifstream file(videosPath);
+    // std::string line = "";
+    // std::string title = "", genre = "", production = "";
+    // int copyCount = 0;
+    // Video *video = nullptr;
+    // while (std::getline(file, line))
+    // {
+    //     promptString(title, "Title: ");
+    //     promptString(genre, "Genre: ");
+    //     promptString(production, "Production: ");
+    //     promptInt(copyCount, "Copy Count: ");
+    //     video = new Video(title, genre, production, copyCount);
+    //     _videoStore->addVideo(video);
+    // }
+    // file.close();
+    // std::cout << "Videos loaded successfully!\n";
+};
+
+void Program::saveVideos() {
+    // std::ofstream file(videosPath);
+    // Video *video = _videoStore->getHead();
+    // while (video != nullptr)
+    // {
+    //     file << video->getTitle() << "\n";
+    //     file << video->getGenre() << "\n";
+    //     file << video->getProduction() << "\n";
+    //     file << video->getCopyCount() << "\n";
+    //     video = video->getNext();
+    // }
+    // file.close();
+    // std::cout << "Videos saved successfully!\n";
+};
 
 void Program::init()
 {

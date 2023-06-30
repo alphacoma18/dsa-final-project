@@ -4,6 +4,10 @@ Video::Video(std::string title, std::string genre, std::string production, int c
 {
     _id = ++_idCounter;
 }
+Video::~Video()
+{
+    _idCounter--;
+}
 
 int Video::getId() const
 {

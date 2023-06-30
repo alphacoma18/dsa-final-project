@@ -10,6 +10,7 @@ BaseCustomer::BaseCustomer()
 {
     _id++;
 }
+BaseCustomer::~BaseCustomer() = default;
 
 int BaseCustomer::getId() const
 {
