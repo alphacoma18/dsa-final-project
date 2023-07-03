@@ -3,6 +3,7 @@
 #include <map>
 #include <vector>
 #include <algorithm>
+#include <fstream>
 #include "./adts/videoStore/data.hpp"
 #include "./adts/customerHandler/data.hpp"
 #include "./adts/rentalHandler/data.hpp"
@@ -10,7 +11,21 @@
 class BaseProgram
 {
 protected:
-    std::string _videosPath = "videos.txt";
+    struct Paths
+    {
+        std::string videos = "./data/videos.txt";
+        std::string customers = "./data/customers.txt";
+        std::string rentals = "./data/customer-rent.txt";
+        std::string persist = "./data/_persist.txt";
+    };
+    const Paths _paths = Paths();
+    struct Ids
+    {
+        int videoId = 0;
+        int customerId = 0;
+        int rentalId = 0;
+    };
+    Ids _ids = Ids();
     const std::vector<std::vector<std::string>> _members = {
         {"Alpha Romer Coma", "Lead Programmer"},
         {"Raphael Andre Mercado", "Programmer 1"},
@@ -39,15 +54,20 @@ private:
         {3, "List of videos rented by customer"},
         {4, "Back"}};
 
-    VideoStore *_videoStore = new VideoStore(_videosPath);
-    CustomerHandler *_customerHandler = new CustomerHandler();
-    RentalHandler *_rentalHandler = new RentalHandler();
+    VideoStore *_videoStore = new VideoStore(_paths.videos);
+    CustomerHandler *_customerHandler = new CustomerHandler(_paths.customers);
+    RentalHandler *_rentalHandler = new RentalHandler(_paths.rentals);
+    std::ofstream _ofstream = {};
+    std::ifstream _ifstream = {};
+
+
     void loadVideos() const;
     void prompt();
     void displayMenu() const;
     void saveVideos();
     void saveCustomers();
     void saveRentals();
+    void displayCustomerM() const;
 
 public:
     Program();

@@ -61,8 +61,11 @@ void BaseProgram::promptString(std::string &input, std::string message) const
     }
 };
 
-Program::Program() = default;
-Program::~Program() {
+Program::Program() {
+    _ifstream.open(_paths.persist);
+};
+Program::~Program()
+{
     delete _videoStore;
     delete _customerHandler;
     delete _rentalHandler;
@@ -94,8 +97,9 @@ void Program::prompt()
             promptString(genre, "Genre: ");
             promptString(production, "Production: ");
             promptInt(copyCount, "Copy Count: ");
-            // _videoStore->addVideo(Video(title, genre, production, copyCount));
-            // _videoStore->addVideo(video);
+            ++_ids.videoId;
+            _videoStore->addVideo(new VideoStore::Video(_ids.videoId, title, genre, production, copyCount));
+            std::cout << "Info: Video added.\n";
             break;
         }
         case 2:
@@ -169,10 +173,11 @@ void Program::prompt()
         }
         case 7:
             // TODO: Implement this
+
             break;
         case 8:
         {
-            saveVideos();
+            // saveVideos();
             // saveCustomers();
             std::cout << "\nThank you for using the program!\n\nMembers:\n";
             for (auto const &member : _members)
@@ -184,42 +189,12 @@ void Program::prompt()
     } while (selection != 8);
 };
 
-void Program::loadVideos() const
-{
-    std::ifstream file(_videosPath);
-    std::string line = "";
-    std::string title = "", genre = "", production = "";
-    int copyCount = 0;
-    VideoStore::Video *video = nullptr;
-    while (std::getline(file, line))
-    {
-        promptString(title, "Title: ");
-        promptString(genre, "Genre: ");
-        promptString(production, "Production: ");
-        promptInt(copyCount, "Copy Count: ");
-        video = new VideoStore::Video(title, genre, production, copyCount);
-        _videoStore->addVideo(video);
-    }
-    delete video;
-    file.close();
-    std::cout << "Videos loaded successfully!\n";
-};
+// void Program::loadVideos() const
+// {
 
-void Program::saveVideos(){
-    // std::ofstream file(videosPath);
-    // Video *video = _videoStore->getHead();
-    // while (video != nullptr)
-    // {
-    //     file << video->getTitle() << "\n";
-    //     file << video->getGenre() << "\n";
-    //     file << video->getProduction() << "\n";
-    //     file << video->getCopyCount() << "\n";
-    //     video = video->getNext();
-    // }
-    // file.close();
-    // std::cout << "Videos saved successfully!\n";
-};
-void saveCustomers();
+// };
+
+// void saveCustomers();
 
 void Program::init()
 {

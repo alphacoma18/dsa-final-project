@@ -5,15 +5,9 @@
 #include <fstream>
 #include "data.hpp"
 
-VideoStore::Video::Video(std::string title, std::string genre, std::string production, int copyCount) : _title(title), _genre(genre), _production(production), _copyCount(copyCount)
-{
-    _id = ++_idCounter;
-}
+VideoStore::Video::Video(int id, std::string title, std::string genre, std::string production, int copyCount) : _id(id), _title(title), _genre(genre), _production(production), _copyCount(copyCount){};
 
-VideoStore::Video::~Video()
-{
-    _idCounter--;
-}
+VideoStore::Video::~Video() = default;
 
 int VideoStore::Video::getId() const
 {
@@ -62,17 +56,35 @@ void VideoStore::Video::setPrev(Video *prev)
 {
     _prev = prev;
 }
-int VideoStore::Video::_idCounter = 0;
 
-VideoStore::VideoStore(std::string &videosPath)
+VideoStore::VideoStore(std::string videosPath)
 {
-    std::ifstream file(videosPath);
-    std::string line = "", title = "", genre = "", production = "";
-    int copyCount = 0;
-    while (std::getline(file, line))
-    {
-    }
-    file.close();
+    // _savePath = videosPath;
+    // _ifstream.open(_savePath);
+    // if (!_ifstream.is_open())
+    // {
+    //     std::cout << "Error opening file: " << _savePath << std::endl;
+    //     return;
+    // }
+    // // Line 1: id
+    // // Line 2 : Movie Title
+    // // Line 3 : Genre
+    // // Line 4 : Production
+    // // Line 5 : Number of Copies
+
+    // std::string line = "", title = "", genre = "", production = "";
+    // int id = 0, copyCount = 0;
+    // while (std::getline(_ifstream, line))
+    // {
+    //     id = std::stoi(line);
+    //     std::getline(_ifstream, title);
+    //     std::getline(_ifstream, genre);
+    //     std::getline(_ifstream, production);
+    //     std::getline(_ifstream, line);
+    //     copyCount = std::stoi(line);
+    //     addVideo(new Video(id, title, genre, production, copyCount));
+    // }
+    // _ifstream.close();
 };
 
 VideoStore::~VideoStore()
@@ -85,11 +97,9 @@ VideoStore::~VideoStore()
         curr = next;
     }
 
-
     _head = nullptr;
     _tail = nullptr;
     _curr = nullptr;
-
 };
 
 VideoStore::Video *VideoStore::getVideo(int id) const

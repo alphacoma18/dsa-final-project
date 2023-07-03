@@ -2,9 +2,9 @@
 #include <string>
 #include "data.hpp"
 
-CustomerHandler::Customer::Customer(std::string name, std::string address)
+CustomerHandler::Customer::Customer(int id, std::string name, std::string address)
 {
-    _id++;
+    _id = id;
     _name = name;
     _address = address;
 }
@@ -26,11 +26,29 @@ std::string CustomerHandler::Customer::getAddress() const
     return _address;
 }
 
-int CustomerHandler::Customer::_id = 0;
+CustomerHandler::CustomerHandler(std::string savePath) {
+    // _savePath = savePath;
+    // _ifstream.open(_savePath);
+    // if (!_ifstream.is_open())
+    // {
+    //     std::cout << "Info: No customer data found\n";
+    //     return;
+    // }
+    // std::string line = "", name = "", address = "";
+    // int id = 0;
+    // while (std::getline(_ifstream, line))
+    // {
+    //     id = std::stoi(line);
+    //     std::getline(_ifstream, name);
+    //     std::getline(_ifstream, address);
+    //     Customer *customer = new Customer(id, name, address);
+    //     _customers.push(customer);
+    // };
+    // _ifstream.close();
+}
 
-CustomerHandler::CustomerHandler() = default;
-
-CustomerHandler::~CustomerHandler() {
+CustomerHandler::~CustomerHandler()
+{
     while (!_customers.empty())
     {
         Customer *customer = _customers.front();
@@ -60,9 +78,9 @@ bool CustomerHandler::customerExists(int id)
     return true;
 }
 
-void CustomerHandler::addCustomer(std::string name, std::string address)
+void CustomerHandler::addCustomer(int id, std::string name, std::string address)
 {
-    Customer *customer = new Customer(name, address);
+    Customer *customer = new Customer(id, name, address);
     _customers.push(customer);
     std::cout << "Response: Customer Successfully Added\n";
 }

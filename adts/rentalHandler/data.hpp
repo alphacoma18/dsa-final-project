@@ -9,13 +9,13 @@ private:
     class Rental
     {
     private:
-        static int _idCounter;
+        // static int _idCounter;
         int _id = 0;
         int _customerId = 0;
         std::stack<int> _videoIds = {};
 
     public:
-        Rental(int customerId, int videoId);
+        Rental(int id, int customerId, int videoId);
         ~Rental();
         int getId() const;
         int getCustomerId() const;
@@ -24,15 +24,15 @@ private:
         void removeVideo(int videoId);
     };
     std::stack<Rental *> _rentedVideos = {};
-    std::string _filename = "rentals.txt";
+    std::string _savePath = "";
     std::ofstream _ofstream = {};
     std::ifstream _ifstream = {};
     Rental *getRental(int id);
 
 public:
-    RentalHandler();
+    RentalHandler(std::string savePath);
     ~RentalHandler();
-    void addRental(int customerId, int videoId);
+    void addRental(int id, int customerId, int videoId);
     void rentVideo(int customerId, int videoId);
     void returnVideo(int customerId, int videoId);
     void displayCustomerRentals(int customerId);

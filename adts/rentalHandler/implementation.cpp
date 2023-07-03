@@ -3,7 +3,38 @@
 #include <stack>
 #include "data.hpp"
 
-RentalHandler::RentalHandler() = default;
+RentalHandler::RentalHandler(std::string rentalsPath)
+{
+    // _savePath = rentalsPath;
+    // _ifstream.open(_savePath);
+    // if (!_ifstream.is_open())
+    // {
+    //     std::cout << "Info: No rental data found\n";
+    //     return;
+    // }
+    // std::string line = "";
+    // int id = 0, customerId = 0, videoId = 0;
+    // // Line 1 : id
+    // // Line 2 : customer id
+    // //  Line 3 : Video_ID(of all rented videos of a customer)
+
+    // while (std::getline(_ifstream, line))
+    // {
+    //     id = std::stoi(line);
+    //     std::getline(_ifstream, line);
+    //     customerId = std::stoi(line);
+    //     Rental *rental = new Rental(id, customerId, videoId);
+    //     while (std::getline(_ifstream, line))
+    //     {
+    //         if (line == "")
+    //             break;
+    //         videoId = std::stoi(line);
+    //         rental->addVideo(videoId);
+    //     }
+    //     _rentedVideos.push(rental);
+    // };
+    // _ifstream.close();
+};
 RentalHandler::~RentalHandler()
 {
     while (!_rentedVideos.empty())
@@ -12,8 +43,8 @@ RentalHandler::~RentalHandler()
         _rentedVideos.pop();
     }
 };
-int RentalHandler::Rental::_idCounter = 0;
-RentalHandler::Rental::Rental(int customerId, int videoId)
+// int RentalHandler::Rental::_idCounter = 0;
+RentalHandler::Rental::Rental(int id, int customerId, int videoId)
 {
     _customerId = customerId;
     _videoIds.push(videoId);
@@ -78,9 +109,9 @@ RentalHandler::Rental *RentalHandler::getRental(int id)
     return nullptr;
 }
 
-void RentalHandler::addRental(int customerId, int videoId)
+void RentalHandler::addRental(int id, int customerId, int videoId)
 {
-    Rental *rental = new Rental(customerId, videoId);
+    Rental *rental = new Rental(id, customerId, videoId);
     _rentedVideos.push(rental);
     std::cout << "Response: Rental Successfully Added\n";
 }
@@ -141,7 +172,7 @@ void RentalHandler::displayAllRentals()
 
 void RentalHandler::saveRentals()
 {
-    _ofstream.open(_filename);
+    _ofstream.open(_savePath);
     std::stack<Rental *> temp = {};
     while (!_rentedVideos.empty())
     {

@@ -4,10 +4,11 @@
 
 ### Video Format
 
-Line 1: Movie Title
-Line 2: Genre
-Line 3: Production
-Line 4: Number of Copies
+Line 1: id
+Line 2: Movie Title
+Line 3: Genre
+Line 4: Production
+Line 5: Number of Copies
 
 ### Customer Format
 
@@ -18,7 +19,14 @@ Line 3: Address
 ### Rental Format
 
 Line 1: id
-Line 2: Video_ID (of all rented videos of a customer)
+Line 2: Customer_ID
+Line 3: Video_ID (of all rented videos of a customer)
+
+### Persist Format
+
+Line 1: Last Video ID
+Line 2: Last Customer ID
+Line 3: Last Rental ID
 
 ## How to Run (VS Code)
 
