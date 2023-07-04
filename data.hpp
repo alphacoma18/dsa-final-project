@@ -28,7 +28,6 @@ protected:
         {"Enrico Casas", "QA & Documentation"}};
     template <typename T>
     void prompter(T &input, std::string message, std::function<bool(T)> validator) const;
-    // void BaseProgram::basePrompter(T &input, std::string message, std::function<bool(T)> validator, std::function<void(T)> func) const;
     void promptInt(int &input, std::string message) const;
     void promptString(std::string &input, std::string message) const;
     void promptChar(char &input, std::string message) const;
@@ -67,12 +66,8 @@ private:
     std::ofstream _ofstream = {};
     std::ifstream _ifstream = {};
 
-    void loadVideos() const;
     void prompt();
     void displayMenu(std::map<int, std::string> m) const;
-    void saveVideos();
-    void saveCustomers();
-    void saveRentals();
 
 public:
     Program();

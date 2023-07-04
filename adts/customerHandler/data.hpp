@@ -33,5 +33,5 @@ public:
     void addCustomer(int id, std::string name, std::string address);
     void displayCustomers() const;
     void displayCustomerDetails(int id);
-    void saveCustomerDetails() const;
+    void saveCustomers() const;
 };

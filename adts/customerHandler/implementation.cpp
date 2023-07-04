@@ -28,24 +28,25 @@ std::string CustomerHandler::Customer::getAddress() const
 
 CustomerHandler::CustomerHandler(std::string savePath)
 {
-    // _savePath = savePath;
-    // _ifstream.open(_savePath);
-    // if (!_ifstream.is_open())
-    // {
-    //     std::cout << "Info: No customer data found\n";
-    //     return;
-    // }
-    // std::string line = "", name = "", address = "";
-    // int id = 0;
-    // while (std::getline(_ifstream, line))
-    // {
-    //     id = std::stoi(line);
-    //     std::getline(_ifstream, name);
-    //     std::getline(_ifstream, address);
-    //     Customer *customer = new Customer(id, name, address);
-    //     _customers.push(customer);
-    // };
-    // _ifstream.close();
+    _savePath = savePath;
+    _ifstream.open(_savePath);
+    if (!_ifstream.is_open())
+    {
+        std::cout << "Error: Unable to load customer data\n";
+        return;
+    }
+    std::string line = "", name = "", address = "";
+    int id = 0;
+    while (std::getline(_ifstream, line))
+    {
+        id = std::stoi(line);
+        std::getline(_ifstream, name);
+        std::getline(_ifstream, address);
+        Customer *customer = new Customer(id, name, address);
+        _customers.push(customer);
+        std::getline(_ifstream, line);
+    };
+    _ifstream.close();
 }
 
 CustomerHandler::~CustomerHandler()
@@ -118,19 +119,23 @@ void CustomerHandler::displayCustomerDetails(int id)
     std::cout << "Address: " << customer->getAddress() << "\n";
     std::cout << "-------------------------\n";
 }
-void CustomerHandler::saveCustomerDetails() const
+void CustomerHandler::saveCustomers() const
 {
     std::ofstream outputFile(_savePath);
-   
+    if (!outputFile.is_open())
+    {
+        std::cout << "Error: Unable to save customer data\n";
+        return;
+    }
     std::queue<Customer *> customerQueue = _customers;
     while (!customerQueue.empty())
     {
         Customer *customer = customerQueue.front();
-        outputFile << customer->getId() << std::endl;
-        outputFile << customer->getName() << std::endl;
-        outputFile << customer->getAddress() << std::endl;
+        outputFile << customer->getId() << "\n";
+        outputFile << customer->getName() << "\n";
+        outputFile << customer->getAddress() << "\n\n";
         customerQueue.pop();
     }
     outputFile.close();
-    std::cout << "File saved succesfully.";
+    std::cout << "Success: File saved";
 }

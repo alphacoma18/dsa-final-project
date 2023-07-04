@@ -10,28 +10,28 @@
 
 void BaseProgram::promptChoices(int &selection, int max, std::string message) const
 {
-    try
+    while (true)
     {
         std::cout << message;
         std::cin >> selection;
         if (selection < 0 || selection > max || std::cin.fail())
-            throw std::invalid_argument("Error: Invalid input.");
-
+        {
+            std::cout << "Error: Invalid input.\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            continue;
+        }
         char confirm = 'Y';
-        promptChar(confirm, "You have selected " + std::to_string(selection) + " Proceed? Y|N: ");
+        promptChar(confirm, "\nYou have selected " + std::to_string(selection) + " Proceed? Y|N: ");
         confirm = std::toupper(confirm);
-
         if (confirm != 'N' && confirm != 'Y')
-            throw std::invalid_argument("Error: Invalid input.");
+        {
+            std::cout << "Error: Invalid input.\n";
+            continue;
+        }
         if (confirm == 'N')
-            selection = -1;
-    }
-    catch (const std::exception &e)
-    {
-        std::cout << e.what() << std::endl;
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        promptChoices(selection, max, message);
+            continue;
+        break;
     }
 };
 
@@ -55,13 +55,12 @@ void BaseProgram::prompter(T &input, std::string message, std::function<bool(T)>
         std::cout << message;
         if constexpr (std::is_same<T, std::string>::value)
         {
-            std::cin.ignore();
+            if (std::cin.peek() == '\n')
+                std::cin.ignore();
             std::getline(std::cin, input);
         }
         else
-        {
             std::cin >> input;
-        }
         if (cinFailed<T>() || validator(input))
         {
             std::cout << "Error: Invalid input.\n";
@@ -94,11 +93,19 @@ Program::Program()
     _ifstream.open(_paths.persist);
     if (!_ifstream.is_open())
     {
-        std::cout << "Error opening file: ";
+        std::cout << "Error: Unable to load persist data\n";
         return;
     }
-    Ids ids = {};
+    std::string line = "";
+    std::getline(_ifstream, line);
+    _ids.videoId = std::stoi(line);
+    std::getline(_ifstream, line);
+    _ids.customerId = std::stoi(line);
+    std::getline(_ifstream, line);
+    _ids.rentalId = std::stoi(line);
+    _ifstream.close();
 };
+
 Program::~Program()
 {
     delete _videoStore;
@@ -126,7 +133,7 @@ void Program::prompt()
         {
             int copyCount = 0;
             std::string title = "", genre = "", production = "";
-            std::cout << "\nEnter the video details:\n";
+            std::cout << "\nEnter the video details:\n\n";
             std::cin.ignore();
             promptString(title, "Title: ");
             promptString(genre, "Genre: ");
@@ -154,7 +161,8 @@ void Program::prompt()
                 std::cout << "Info: Customer not found.\n";
                 break;
             };
-            _rentalHandler->rentVideo(customerId, videoId);
+            _rentalHandler->rentVideo(_ids.rentalId, customerId, videoId);
+            break;
         }
         case 3:
         {
@@ -207,14 +215,50 @@ void Program::prompt()
             break;
         }
         case 7:
+        {
+            int selection2 = -1;
             displayMenu(_customerChoices);
+            promptChoices(selection2, _customerChoices.size(), "\nEnter your choice: ");
+            // Todo: Paayos to sa sariling function
+            switch (selection2)
+            {
+            case 1:
+            {
+                // Todo: Add Customer
+                break;
+            }
+            case 2:
+            {
+                // Todo: Show Customer Details
+                break;
+            }
+            case 3:
+            {
+                // Todo: List of Videos Rented by a Customer
+                break;
+            }
+            }
+
             break;
+        }
         case 8:
         {
-            // TODO
-            // saveVideos();
-            // saveCustomers();
-            std::cout << "\nThank you for using the program!\n\nMembers:\n";
+            _ofstream.open(_paths.persist);
+            if (!_ofstream.is_open())
+            {
+                std::cout << "Error: Unable to save persist data";
+                return;
+            }
+            _ofstream << _ids.videoId << "\n";
+            _ofstream << _ids.customerId << "\n";
+            _ofstream << _ids.rentalId << "\n";
+            _ofstream.close();
+
+            _videoStore->saveVideos();
+            _customerHandler->saveCustomers();
+            _rentalHandler->saveRentals();
+            std::cout
+                << "\nThank you for using the program!\n\nMembers:\n";
             for (auto const &member : _members)
                 std::cout << "- " << member[0] << ": " << member[1] << "\n";
             std::cout << "\nThis program was brought to you by BMSCT\n-- Binary Marikina Shoe Company Tree --";
@@ -223,13 +267,6 @@ void Program::prompt()
         }
     } while (selection != 8);
 };
-
-// void Program::loadVideos() const
-// {
-
-// };
-
-// void saveCustomers();
 
 void Program::init()
 {

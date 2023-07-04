@@ -63,7 +63,7 @@ VideoStore::VideoStore(std::string videosPath)
     _ifstream.open(_savePath);
     if (!_ifstream.is_open())
     {
-        std::cout << "Error opening file: " << _savePath << std::endl;
+        std::cout << "Error: Unable to load video data\n";
         return;
     }
     std::string line = "", title = "", genre = "", production = "";
@@ -76,7 +76,6 @@ VideoStore::VideoStore(std::string videosPath)
         std::getline(_ifstream, production);
         std::getline(_ifstream, line);
         copyCount = std::stoi(line);
-        // skip 1 line
         std::getline(_ifstream, line);
         addVideo(new Video(id, title, genre, production, copyCount));
     }
@@ -178,19 +177,22 @@ void VideoStore::displayVideos() const
     }
 };
 
-void VideoStore::saveVideos() const 
+void VideoStore::saveVideos() const
 {
     std::ofstream outputFile(_savePath);
-    
+    if (!outputFile.is_open())
+    {
+        std::cout << "Error: Unable to save video data\n";
+        return;
+    }
     Video *curr = _head;
-    while(curr!=nullptr)
+    while (curr != nullptr)
     {
         outputFile << curr->getId() << "\n";
         outputFile << curr->getTitle() << "\n";
         outputFile << curr->getGenre() << "\n";
         outputFile << curr->getProduction() << "\n";
-        outputFile << curr->getCopyCount() << "\n";
-        outputFile << "\n";
+        outputFile << curr->getCopyCount() << "\n\n";
         curr = curr->getNext();
     }
     outputFile.close();

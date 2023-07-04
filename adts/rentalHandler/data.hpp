@@ -11,16 +11,14 @@ private:
     private:
         int _id = 0;
         int _customerId = 0;
-        std::stack<int> _videoIds = {};
+        int _videoId = 0;
 
     public:
         Rental(int id, int customerId, int videoId);
         ~Rental();
         int getId() const;
         int getCustomerId() const;
-        std::stack<int> getVideoIds() const;
-        void addVideo(int videoId);
-        void removeVideo(int videoId);
+        int getVideoId() const;
     };
     std::stack<Rental *> _rentedVideos = {};
     std::string _savePath = "";
@@ -31,8 +29,7 @@ private:
 public:
     RentalHandler(std::string savePath);
     ~RentalHandler();
-    void addRental(int id, int customerId, int videoId);
-    void rentVideo(int customerId, int videoId);
+    void rentVideo(int id, int customerId, int videoId);
     void returnVideo(int customerId, int videoId);
     void displayCustomerRentals(int customerId);
     void displayAllRentals();
