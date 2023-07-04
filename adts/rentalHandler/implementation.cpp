@@ -3,8 +3,7 @@
 #include <stack>
 #include "data.hpp"
 
-RentalHandler::RentalHandler(std::string rentalsPath)
-{
+RentalHandler::RentalHandler(std::string rentalsPath){
     // _savePath = rentalsPath;
     // _ifstream.open(_savePath);
     // if (!_ifstream.is_open())
@@ -43,9 +42,9 @@ RentalHandler::~RentalHandler()
         _rentedVideos.pop();
     }
 };
-// int RentalHandler::Rental::_idCounter = 0;
 RentalHandler::Rental::Rental(int id, int customerId, int videoId)
 {
+    _id = id;
     _customerId = customerId;
     _videoIds.push(videoId);
 }
@@ -174,6 +173,7 @@ void RentalHandler::saveRentals()
 {
     _ofstream.open(_savePath);
     std::stack<Rental *> temp = {};
+
     while (!_rentedVideos.empty())
     {
         Rental *rental = _rentedVideos.top();

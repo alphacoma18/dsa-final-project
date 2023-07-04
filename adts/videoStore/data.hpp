@@ -43,7 +43,8 @@ public:
     Video *returnVideo(int id) const;
     Video *getHead() const;
     void displayVideos() const;
-
+    void saveVideos() const;
+    
 private:
     Video *_head = nullptr;
     Video *_tail = nullptr;

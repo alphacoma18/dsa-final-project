@@ -1,74 +1,149 @@
+1
 The Ring (1998)
 Horror
 Takashige Ichise, Shinya Kawai, Takenori Sento
 2
 
+2
 Scream (2022) 
 Horror
 William Sherak, James Vanderbilt, Paul Neinstein
 7
 
+3
 Get Out (2017) 
 Horror
 Sean McKittrick, Jason Blum, Edward H. Hamm Jr., Jordan Peele
 5
 
+4
 Silence of the Lambs (1991)
 Horror
 Ronald M. Bozman, Edward Saxon, Kenneth Utt
 4
 
+5
 Dawn of the Dead (1978)
 Horror
 Richard P. Rubinstein
 1
 
+6
 Ghost in the Shell (1995) 
 Sci-fi
 Mitsuhisa Ishikawa, Ken Iyadomi, Ken Matsumoto, Yoshimasa Mizuo
 4
 
+7
 Star Wars: The Last Jedi (2017)
 Sci-fi
 Kathleen Kennedy, Ram Bergman
 10
 
+8
 WestWorld (1973) 
 Sci-fi
 Paul N. Lazarus III
 2
 
+9
 Shin Godzilla (2016)
 Sci-fi
 Yoshihiro Satô, Masaya Shibusawa, Taichi Ueda, Kazutoshi Wadakura
 6
 
+10
 Interstellar (2014) 
 Sci-fi
 Emma Thomas, Christopher Nolan, Lynda Obst
 8
 
+11
 John Wick: Chapter 2 (2017) 
 Action
 Basil Iwanyk, Erica Lee
 8
 
+12
 Mad Max: Fury Road (2015)
 Action, Adventure
 Doug Mitchell, George Miller, P.J. Voeten
 7
 
+13
 Drunken Master II (1994) 
 Action
 Edward Tang, Eric Tsang, Barbie Tung
 1
 
+14
 No Time to Die (2021) 
 Action
-Production: Michael G. Wilson, Barbara Broccoli
+Michael G. Wilson, Barbara Broccoli
 8
 
+15
 The Terminator (1984) 
 Action
-Production: Gale Anne Hurd
+Gale Anne Hurd
 9
+
+16
+The Fault in Our Stars (2014)
+Drama, Romance
+Wyck Godfrey, Marty Bowen
+5
+
+17
+A Walk to Remember (2002)
+Drama, Romance
+Denise Di Novi, Hunt Lowry
+4
+
+18
+The Vow (2012)
+Drama, Romance
+Gary Lucchesi, Ryan Kavanaugh
+7
+
+19
+The Lucky One (2012)
+Drama, Romance
+Denise Di Novi, Kevin McCormick
+9
+
+20
+Dear John (2010)
+Drama, Romance, War
+Marty Bowen, Wyck Godfrey
+3
+
+21
+The Hangover (2009)
+Comedy
+Todd Phillips, Daniel Goldberg
+5
+
+22
+The Dictator (2012)
+Comedy
+Sacha Baron Cohen, Alec Berg
+6
+
+23
+Ted (2012)
+Comedy
+Scott Stuber, Seth MacFarlane
+2
+
+24
+Horrible Bosses (2011)
+Comedy, Crime
+Brett Ratner, Jay Stern
+1
+
+25
+Vacation (2015)
+Adventure, Comedy
+David Dobkin, Chris Bender
+8

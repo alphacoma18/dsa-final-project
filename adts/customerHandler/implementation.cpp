@@ -26,7 +26,8 @@ std::string CustomerHandler::Customer::getAddress() const
     return _address;
 }
 
-CustomerHandler::CustomerHandler(std::string savePath) {
+CustomerHandler::CustomerHandler(std::string savePath)
+{
     // _savePath = savePath;
     // _ifstream.open(_savePath);
     // if (!_ifstream.is_open())
@@ -82,7 +83,7 @@ void CustomerHandler::addCustomer(int id, std::string name, std::string address)
 {
     Customer *customer = new Customer(id, name, address);
     _customers.push(customer);
-    std::cout << "Response: Customer Successfully Added\n";
+    std::cout << "Response:" << name << " Customer Successfully Added\n";
 }
 
 void CustomerHandler::displayCustomers() const
@@ -110,9 +111,26 @@ void CustomerHandler::displayCustomerDetails(int id)
     Customer *customer = getCustomer(id);
     if (customer == nullptr)
         return;
+
     std::cout << "-------------------------\n";
     std::cout << "Customer ID" << customer->getId() << "\n";
     std::cout << "Name: " << customer->getName() << "\n";
     std::cout << "Address: " << customer->getAddress() << "\n";
     std::cout << "-------------------------\n";
+}
+void CustomerHandler::saveCustomerDetails() const
+{
+    std::ofstream outputFile(_savePath);
+   
+    std::queue<Customer *> customerQueue = _customers;
+    while (!customerQueue.empty())
+    {
+        Customer *customer = customerQueue.front();
+        outputFile << customer->getId() << std::endl;
+        outputFile << customer->getName() << std::endl;
+        outputFile << customer->getAddress() << std::endl;
+        customerQueue.pop();
+    }
+    outputFile.close();
+    std::cout << "File saved succesfully.";
 }

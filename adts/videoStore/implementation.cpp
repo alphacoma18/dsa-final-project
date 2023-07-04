@@ -59,32 +59,28 @@ void VideoStore::Video::setPrev(Video *prev)
 
 VideoStore::VideoStore(std::string videosPath)
 {
-    // _savePath = videosPath;
-    // _ifstream.open(_savePath);
-    // if (!_ifstream.is_open())
-    // {
-    //     std::cout << "Error opening file: " << _savePath << std::endl;
-    //     return;
-    // }
-    // // Line 1: id
-    // // Line 2 : Movie Title
-    // // Line 3 : Genre
-    // // Line 4 : Production
-    // // Line 5 : Number of Copies
-
-    // std::string line = "", title = "", genre = "", production = "";
-    // int id = 0, copyCount = 0;
-    // while (std::getline(_ifstream, line))
-    // {
-    //     id = std::stoi(line);
-    //     std::getline(_ifstream, title);
-    //     std::getline(_ifstream, genre);
-    //     std::getline(_ifstream, production);
-    //     std::getline(_ifstream, line);
-    //     copyCount = std::stoi(line);
-    //     addVideo(new Video(id, title, genre, production, copyCount));
-    // }
-    // _ifstream.close();
+    _savePath = videosPath;
+    _ifstream.open(_savePath);
+    if (!_ifstream.is_open())
+    {
+        std::cout << "Error opening file: " << _savePath << std::endl;
+        return;
+    }
+    std::string line = "", title = "", genre = "", production = "";
+    int id = 0, copyCount = 0;
+    while (std::getline(_ifstream, line))
+    {
+        id = std::stoi(line);
+        std::getline(_ifstream, title);
+        std::getline(_ifstream, genre);
+        std::getline(_ifstream, production);
+        std::getline(_ifstream, line);
+        copyCount = std::stoi(line);
+        // skip 1 line
+        std::getline(_ifstream, line);
+        addVideo(new Video(id, title, genre, production, copyCount));
+    }
+    _ifstream.close();
 };
 
 VideoStore::~VideoStore()
@@ -181,3 +177,22 @@ void VideoStore::displayVideos() const
         curr = curr->getNext();
     }
 };
+
+void VideoStore::saveVideos() const 
+{
+    std::ofstream outputFile(_savePath);
+    
+    Video *curr = _head;
+    while(curr!=nullptr)
+    {
+        outputFile << curr->getId() << "\n";
+        outputFile << curr->getTitle() << "\n";
+        outputFile << curr->getGenre() << "\n";
+        outputFile << curr->getProduction() << "\n";
+        outputFile << curr->getCopyCount() << "\n";
+        outputFile << "\n";
+        curr = curr->getNext();
+    }
+    outputFile.close();
+    std::cout << "Videos saved successfully.";
+}

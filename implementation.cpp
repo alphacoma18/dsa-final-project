@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <limits>
 #include <fstream>
+#include <functional>
 #include "data.hpp"
 
 void BaseProgram::promptChoices(int &selection, int max, std::string message) const
@@ -15,6 +16,15 @@ void BaseProgram::promptChoices(int &selection, int max, std::string message) co
         std::cin >> selection;
         if (selection < 0 || selection > max || std::cin.fail())
             throw std::invalid_argument("Error: Invalid input.");
+
+        char confirm = 'Y';
+        promptChar(confirm, "You have selected " + std::to_string(selection) + " Proceed? Y|N: ");
+        confirm = std::toupper(confirm);
+
+        if (confirm != 'N' && confirm != 'Y')
+            throw std::invalid_argument("Error: Invalid input.");
+        if (confirm == 'N')
+            selection = -1;
     }
     catch (const std::exception &e)
     {
@@ -25,44 +35,69 @@ void BaseProgram::promptChoices(int &selection, int max, std::string message) co
     }
 };
 
-void BaseProgram::promptInt(int &input, std::string message) const
+template <typename T>
+bool cinFailed()
 {
-    try
+    if (std::cin.fail())
     {
-        std::cout << message;
-        std::cin >> input;
-        if (input < 0 || std::cin.fail())
-            throw std::invalid_argument("Error: Invalid input.");
-    }
-    catch (const std::exception &e)
-    {
-        std::cout << e.what() << std::endl;
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        promptInt(input, message);
+        return true;
     }
+    return false;
+}
+
+template <typename T>
+void BaseProgram::prompter(T &input, std::string message, std::function<bool(T)> validator) const
+{
+    while (true)
+    {
+        std::cout << message;
+        if constexpr (std::is_same<T, std::string>::value)
+        {
+            std::cin.ignore();
+            std::getline(std::cin, input);
+        }
+        else
+        {
+            std::cin >> input;
+        }
+        if (cinFailed<T>() || validator(input))
+        {
+            std::cout << "Error: Invalid input.\n";
+            continue;
+        }
+        break;
+    }
+};
+
+void BaseProgram::promptInt(int &input, std::string message) const
+{
+    prompter<int>(input, message, [](int input)
+                  { return input < 0; });
 };
 
 void BaseProgram::promptString(std::string &input, std::string message) const
 {
-    try
-    {
-        std::cout << message;
-        std::getline(std::cin, input);
-        if (input.empty() || std::cin.fail())
-            throw std::invalid_argument("Error: Invalid input.");
-    }
-    catch (const std::exception &e)
-    {
-        std::cout << e.what() << std::endl;
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        promptString(input, message);
-    }
+    prompter<std::string>(input, message, [](std::string input)
+                          { return input.empty(); });
 };
 
-Program::Program() {
+void BaseProgram::promptChar(char &input, std::string message) const
+{
+    prompter<char>(input, message, [](char input)
+                   { return input == '\0'; });
+};
+
+Program::Program()
+{
     _ifstream.open(_paths.persist);
+    if (!_ifstream.is_open())
+    {
+        std::cout << "Error opening file: ";
+        return;
+    }
+    Ids ids = {};
 };
 Program::~Program()
 {
@@ -71,7 +106,7 @@ Program::~Program()
     delete _rentalHandler;
 };
 
-void Program::displayMenu() const
+void Program::displayMenu(std::map<int, std::string> m) const
 {
     std::cout << "\nPlease select an option:\n";
     for (auto const &choice : _choices)
@@ -83,7 +118,7 @@ void Program::prompt()
     int selection = -1;
     do
     {
-        displayMenu();
+        displayMenu(_choices);
         promptChoices(selection, _choices.size(), "\nEnter your choice: ");
         switch (selection)
         {
@@ -172,11 +207,11 @@ void Program::prompt()
             break;
         }
         case 7:
-            // TODO: Implement this
-
+            displayMenu(_customerChoices);
             break;
         case 8:
         {
+            // TODO
             // saveVideos();
             // saveCustomers();
             std::cout << "\nThank you for using the program!\n\nMembers:\n";

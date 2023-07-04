@@ -9,7 +9,6 @@ private:
     class Rental
     {
     private:
-        // static int _idCounter;
         int _id = 0;
         int _customerId = 0;
         std::stack<int> _videoIds = {};
