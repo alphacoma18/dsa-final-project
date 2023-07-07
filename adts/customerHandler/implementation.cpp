@@ -95,14 +95,13 @@ void CustomerHandler::displayCustomers() const
         std::cout << "Info: No customers in queue\n";
         return;
     }
+    std::cout << "\n------------------ Customers ------------------\n\n";
     while (!customerQueue.empty())
     {
         Customer *customer = customerQueue.front();
-        std::cout << "-------------------------\n";
-        std::cout << "Customer ID" << customer->getId() << "\n";
+        std::cout << "Customer ID: " << customer->getId() << "\n";
         std::cout << "Name: " << customer->getName() << "\n";
-        std::cout << "Address: " << customer->getAddress() << "\n";
-        std::cout << "-------------------------\n";
+        std::cout << "Address: " << customer->getAddress() << "\n\n";
         customerQueue.pop();
     }
 }
@@ -137,5 +136,5 @@ void CustomerHandler::saveCustomers() const
         customerQueue.pop();
     }
     outputFile.close();
-    std::cout << "Success: File saved\n";
+    std::cout << "Success: Customers saved.\n";
 }

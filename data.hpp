@@ -29,9 +29,8 @@ protected:
     template <typename T>
     void prompter(T &input, std::string message, std::function<bool(T)> validator) const;
     void promptInt(int &input, std::string message, std::function<bool(int)> validator) const;
-    void promptString(std::string &input, std::string message) const;
+    void promptString(std::string &input, std::string message, std::function<bool(std::string)> validator) const;
     void promptChar(char &input, std::string message, std::function<bool(char)> validator) const;
-    void promptChoices(int &selection, int max, std::string message) const;
 
 public:
     struct Ids
@@ -68,6 +67,7 @@ private:
 
     void prompt();
     void displayMenu(std::map<int, std::string> &m) const;
+    void chooseDisplay();
     void customerPrompt();
     void exitProgram();
 

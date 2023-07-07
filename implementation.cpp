@@ -14,20 +14,6 @@
 #define CLEAR "clear"
 #endif
 
-void BaseProgram::promptChoices(int &selection, int max, std::string message) const
-{
-    while (true)
-    {
-        promptInt(selection, message, [max](int input)
-                  { return input <= 0 || input > max; });
-        char confirm = 'Y';
-        promptChar(confirm, "\nYou have selected " + std::to_string(selection) + " \nProceed? Y|N: ", [](char input)
-                   { return input != 'Y' && input != 'N'; });
-        if (confirm == 'Y')
-            break;
-    }
-};
-
 template <typename T>
 bool cinFailed()
 {
@@ -56,7 +42,7 @@ void BaseProgram::prompter(T &input, std::string message, std::function<bool(T)>
             std::cin >> input;
         if (cinFailed<T>() || validator(input))
         {
-            std::cout << "Error: Invalid input\n";
+            std::cout << "Error: Invalid input\n\n";
             continue;
         }
         break;
@@ -69,10 +55,11 @@ void BaseProgram::promptInt(
 {
     prompter<int>(input, message, validator);
 };
-void BaseProgram::promptString(std::string &input, std::string message) const
+void BaseProgram::promptString(
+    std::string &input, std::string message, std::function<bool(std::string)> validator = [](std::string input)
+                                             { return input.empty(); }) const
 {
-    prompter<std::string>(input, message, [](std::string input)
-                          { return input.empty(); });
+    prompter<std::string>(input, message, validator);
 };
 
 void BaseProgram::promptChar(
@@ -106,35 +93,49 @@ Program::~Program()
     delete _customerHandler;
     delete _rentalHandler;
 };
+
+void Program::chooseDisplay(){
+
+    int displayOption = -1;
+    std::cout <<"1. Display all Customers\n";
+    std::cout <<"2. Choose a Customer to display\n";
+    promptInt(displayOption, "Enter your choice: ", [](int input)
+              { return input < 1 || input > 2; });
+
+        if(displayOption == 1){
+            _customerHandler->displayCustomers();
+        }else if(displayOption == 2){
+            int customerId = -1;
+           promptInt(customerId, "Enter customer ID: ", [this](int input)
+                  { return !_customerHandler->customerExists(input); });
+
+                  _customerHandler->displayCustomerDetails(customerId);
+        }
+
+}
 void Program::customerPrompt()
 {
     int selection = -1;
     displayMenu(_customerChoices);
-    promptChoices(selection, _customerChoices.size(), "\nEnter your choice: ");
+    promptInt(selection, "Enter your choice: ", [this](int input)
+              { return input <= 0 || input > _customerChoices.size(); });
     switch (selection)
     {
     case 1:
     {
-        int id = 0;
+
         std::string name = "", address = "";
-        promptInt(id, "Enter the customer ID: ");
+        std::cout << "\nEnter the customer details:\n";
         promptString(name, "Name: ");
         promptString(address, "Address: ");
-        _customerHandler->addCustomer(id, name, address);
-        _ofstream.open(_paths.persist);
-        if (!_ofstream.is_open())
-        {
-            std::cout << "Error: Unable to save persist data";
-            return;
-        }
-        _ofstream << ++_ids.videoId << "\n";
-        // _ofstream << _ids.customerId << "\n";
-        // _ofstream << _ids.rentalId << "\n";
+        ++_ids.customerId;
+        _customerHandler->addCustomer(_ids.customerId, name, address);
         break;
     }
     case 2:
     {
-        _customerHandler->displayCustomers();
+        
+        chooseDisplay();
         break;
     }
     case 3:
@@ -201,13 +202,13 @@ void Program::exitProgram()
 
 void Program::prompt()
 {
-    // std::cout << "Welcome to the video store!\n";
+    std::cout << "Welcome to the video store!\n";
     int selection = -1;
     do
     {
-        system(CLEAR);
         displayMenu(_choices);
-        promptChoices(selection, _choices.size(), "\nEnter your choice: ");
+        promptInt(selection, "\nEnter your choice: ", [this](int input)
+                  { return input <= 0 || input > _choices.size(); });
         switch (selection)
         {
         case 1:
@@ -216,11 +217,13 @@ void Program::prompt()
             std::string title = "", genre = "", production = "";
             std::cout << "\nEnter the video details:\n\n";
             promptString(title, "Title: ");
-            promptString(genre, "Genre: ");
+            promptString(genre, "Genre: ", [this](std::string input)
+                         { return !_videoStore->genreExists(input); });
             promptString(production, "Production: ");
             promptInt(copyCount, "Copy Count: ");
             ++_ids.videoId;
             _videoStore->addVideo(new VideoStore::Video(_ids.videoId, title, genre, production, copyCount));
+            system(CLEAR);
             std::cout << "Success: Video added.\n";
             break;
         }
@@ -228,20 +231,23 @@ void Program::prompt()
         {
             int videoId = 0, customerId = 0;
             promptInt(videoId, "Enter the video ID: ");
-            bool vidExists = _videoStore->videoExists(videoId);
-            if (!vidExists)
+            promptInt(customerId, "Enter the customer ID: ");
+            VideoStore::Video *video = _videoStore->getVideo(videoId);
+            system(CLEAR);
+            if (video == nullptr)
             {
                 std::cout << "Info: Video not found.\n";
                 break;
-            };
-            promptInt(customerId, "Enter the customer ID: ");
+            }
             bool cusExists = _customerHandler->customerExists(customerId);
             if (!cusExists)
             {
                 std::cout << "Info: Customer not found.\n";
                 break;
             };
+            ++_ids.rentalId;
             _rentalHandler->rentVideo(_ids.rentalId, customerId, videoId);
+            video->removeCopy();
             break;
         }
         case 3:
@@ -249,8 +255,9 @@ void Program::prompt()
             int videoId = 0, customerId = 0;
             promptInt(videoId, "Enter the video ID: ");
             promptInt(customerId, "Enter the customer ID: ");
-            bool vidExists = _videoStore->videoExists(videoId);
-            if (!vidExists)
+            VideoStore::Video *video = _videoStore->getVideo(videoId);
+            system(CLEAR);
+            if (video == nullptr)
             {
                 std::cout << "Info: Video not found.\n";
                 break;
@@ -262,6 +269,7 @@ void Program::prompt()
                 break;
             }
             _rentalHandler->returnVideo(customerId, videoId);
+            video->addCopy();
             break;
         }
         case 4:
@@ -271,7 +279,7 @@ void Program::prompt()
             VideoStore::Video *video = _videoStore->getVideo(id);
             if (video == nullptr)
                 break;
-            std::cout << "Title: " << video->getTitle() << "\n";
+            std::cout << "\nTitle: " << video->getTitle() << "\n";
             std::cout << "Genre: " << video->getGenre() << "\n";
             std::cout << "Production: " << video->getProduction() << "\n";
             std::cout << "Copy Count: " << video->getCopyCount() << "\n";
@@ -279,7 +287,6 @@ void Program::prompt()
         }
         case 5:
         {
-            // system(CLEAR);
             _videoStore->displayVideos();
             break;
         }
@@ -291,24 +298,27 @@ void Program::prompt()
             if (video == nullptr)
                 break;
             int count = video->getCopyCount();
+            system(CLEAR);
             if (count > 0)
-                std::cout << "Video is available.\n";
+                std::cout << "Info: Video is available.\n";
             else
-                std::cout << "Video is not available.\n";
+                std::cout << "Info: Video is not available.\n";
             break;
         }
         case 7:
         {
+            system(CLEAR);
             customerPrompt();
             break;
         }
         case 8:
         {
+            system(CLEAR);
+            exitProgram();
             break;
         }
         }
     } while (selection != 8);
-    exitProgram();
 };
 
 void Program::init()

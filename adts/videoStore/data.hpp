@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include <fstream>
+#include <unordered_set>
+
 class VideoStore
 {
 
@@ -17,7 +19,7 @@ public:
         Video *_prev = nullptr;
 
     public:
-        Video(int id, std::string title, std::string genre, std::string production, int copyCount = 1);
+        Video(int id, std::string title, std::string genre, std::string production, int copyCount);
         ~Video();
 
         Video *getNext() const;
@@ -44,11 +46,13 @@ public:
     Video *getHead() const;
     void displayVideos() const;
     void saveVideos() const;
-    
+    bool genreExists(std::string genre) const;
+
 private:
     Video *_head = nullptr;
     Video *_tail = nullptr;
     Video *_curr = nullptr;
+    std::unordered_set<std::string> _genres = {"Action", "Comedy", "Drama", "Horror", "Sci-Fi"};
     std::string _savePath = "";
     std::ofstream _ofstream = {};
     std::ifstream _ifstream = {};

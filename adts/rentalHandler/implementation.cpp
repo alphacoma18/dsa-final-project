@@ -23,6 +23,7 @@ RentalHandler::RentalHandler(std::string rentalsPath)
         videoId = std::stoi(line);
         Rental *rental = new Rental(id, customerId, videoId);
         _rentedVideos.push(rental);
+        std::getline(_ifstream, line);
     };
     _ifstream.close();
 };
@@ -93,7 +94,7 @@ void RentalHandler::returnVideo(int customerId, int videoId)
         if (rental->getCustomerId() == customerId && rental->getVideoId() == videoId)
         {
             delete rental;
-            std::cout << "Info: Rental removed\n";
+            std::cout << "Success: Rental removed\n";
             _rentedVideos.pop();
             break;
         }
@@ -110,6 +111,7 @@ void RentalHandler::returnVideo(int customerId, int videoId)
 void RentalHandler::displayCustomerRentals(int customerId)
 {
     std::stack<Rental *> temp = {};
+    std::cout << "\n------------------ Customer Rentals ------------------\n\n";
     while (!_rentedVideos.empty())
     {
         Rental *rental = _rentedVideos.top();
@@ -122,6 +124,7 @@ void RentalHandler::displayCustomerRentals(int customerId)
         temp.push(rental);
         _rentedVideos.pop();
     }
+    std::cout << "----------------------------------------\n";
     while (!temp.empty())
     {
         _rentedVideos.push(temp.top());
@@ -132,6 +135,7 @@ void RentalHandler::displayCustomerRentals(int customerId)
 void RentalHandler::displayAllRentals()
 {
     std::stack<Rental *> temp = {};
+    std::cout << "\n------------------ Customer Rentals ------------------\n\n";
     while (!_rentedVideos.empty())
     {
         Rental *rental = _rentedVideos.top();
@@ -141,7 +145,7 @@ void RentalHandler::displayAllRentals()
         temp.push(rental);
         _rentedVideos.pop();
     }
-
+    std::cout << "----------------------------------------\n";
     while (!temp.empty())
     {
         _rentedVideos.push(temp.top());
@@ -163,7 +167,7 @@ void RentalHandler::saveRentals()
         Rental *rental = _rentedVideos.top();
         _ofstream << rental->getId() << "\n";
         _ofstream << rental->getCustomerId() << "\n";
-        _ofstream << rental->getVideoId() << "\n";
+        _ofstream << rental->getVideoId() << "\n\n";
         temp.push(rental);
         _rentedVideos.pop();
     }
@@ -174,11 +178,19 @@ void RentalHandler::saveRentals()
         temp.pop();
     }
     _ofstream.close();
+    std::cout << "Success: Rentals saved.\n";
 }
 
 void RentalHandler::displayRentedVideos(int customerId)
 {
     std::stack<Rental *> temp = {};
+    if (_rentedVideos.empty())
+    {
+        std::cout << "\nInfo: No videos rented by customer ID: " << customerId << "\n";
+        return;
+    }
+    std::cout << "\n------------------ Rented Videos ------------------\n\n";
+    std::cout << "Rented videos of customer ID: " << customerId << "\n";
     while (!_rentedVideos.empty())
     {
         Rental *rental = _rentedVideos.top();
@@ -189,6 +201,7 @@ void RentalHandler::displayRentedVideos(int customerId)
         temp.push(rental);
         _rentedVideos.pop();
     }
+    std::cout << "----------------------------------------\n";
     while (!temp.empty())
     {
         _rentedVideos.push(temp.top());

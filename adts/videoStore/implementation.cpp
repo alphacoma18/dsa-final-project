@@ -162,7 +162,7 @@ void VideoStore::displayVideos() const
     Video *curr = _head;
     if (curr == nullptr)
     {
-        std::cout << "\nInfo: No videos available\n";
+        std::cout << "Info: No videos available\n";
         return;
     }
     std::cout << "\n------------------ Videos ------------------\n\n";
@@ -197,4 +197,17 @@ void VideoStore::saveVideos() const
     }
     outputFile.close();
     std::cout << "Success: Videos saved.\n";
+}
+
+bool VideoStore::genreExists(std::string genre) const
+{
+    if (_genres.count(genre) > 0)
+        return true;
+    else
+    {
+        std::cout << "\nGenres:\n";
+        for (auto it = _genres.begin(); it != _genres.end(); ++it)
+            std::cout << "- " << *it << "\n";
+        return false;
+    }
 }
