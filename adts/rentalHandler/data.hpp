@@ -34,4 +34,5 @@ public:
     void displayCustomerRentals(int customerId);
     void displayAllRentals();
     void saveRentals();
+    void displayRentedVideos(int customerId);
 };

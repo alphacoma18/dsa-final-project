@@ -84,7 +84,7 @@ void CustomerHandler::addCustomer(int id, std::string name, std::string address)
 {
     Customer *customer = new Customer(id, name, address);
     _customers.push(customer);
-    std::cout << "Response:" << name << " Customer Successfully Added\n";
+    std::cout << "Success:" << name << " Customer Added\n";
 }
 
 void CustomerHandler::displayCustomers() const
@@ -137,5 +137,5 @@ void CustomerHandler::saveCustomers() const
         customerQueue.pop();
     }
     outputFile.close();
-    std::cout << "Success: File saved";
+    std::cout << "Success: File saved\n";
 }

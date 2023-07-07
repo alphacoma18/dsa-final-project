@@ -81,7 +81,7 @@ void RentalHandler::rentVideo(int id, int customerId, int videoId)
 {
     Rental *rental = new Rental(id, customerId, videoId);
     _rentedVideos.push(rental);
-    std::cout << "Response: Rental added\n";
+    std::cout << "Success: Rental added\n";
 }
 
 void RentalHandler::returnVideo(int customerId, int videoId)
@@ -93,7 +93,7 @@ void RentalHandler::returnVideo(int customerId, int videoId)
         if (rental->getCustomerId() == customerId && rental->getVideoId() == videoId)
         {
             delete rental;
-            std::cout << "Response: Rental removed\n";
+            std::cout << "Info: Rental removed\n";
             _rentedVideos.pop();
             break;
         }
@@ -117,8 +117,7 @@ void RentalHandler::displayCustomerRentals(int customerId)
         {
             std::cout << "Rental ID: " << rental->getId() << "\n";
             std::cout << "Customer ID: " << rental->getCustomerId() << "\n";
-            std::cout << "Video IDs: ";
-            std::cout << "\n";
+            std::cout << "Video IDs: " << rental->getVideoId() << "\n";
         }
         temp.push(rental);
         _rentedVideos.pop();
@@ -138,8 +137,7 @@ void RentalHandler::displayAllRentals()
         Rental *rental = _rentedVideos.top();
         std::cout << "Rental ID: " << rental->getId() << "\n";
         std::cout << "Customer ID: " << rental->getCustomerId() << "\n";
-        std::cout << "Video IDs: ";
-        std::cout << "\n";
+        std::cout << "Video IDs: " << rental->getVideoId() << "\n";
         temp.push(rental);
         _rentedVideos.pop();
     }
@@ -156,7 +154,7 @@ void RentalHandler::saveRentals()
     _ofstream.open(_savePath);
     if (!_ofstream.is_open())
     {
-        std::cout << "Error: Unable to save rental data";
+        std::cout << "Error: Unable to save rental data\n";
         return;
     }
     std::stack<Rental *> temp = {};
@@ -176,4 +174,24 @@ void RentalHandler::saveRentals()
         temp.pop();
     }
     _ofstream.close();
+}
+
+void RentalHandler::displayRentedVideos(int customerId)
+{
+    std::stack<Rental *> temp = {};
+    while (!_rentedVideos.empty())
+    {
+        Rental *rental = _rentedVideos.top();
+        if (rental->getCustomerId() == customerId)
+        {
+            std::cout << "Video ID: " << rental->getVideoId() << "\n";
+        }
+        temp.push(rental);
+        _rentedVideos.pop();
+    }
+    while (!temp.empty())
+    {
+        _rentedVideos.push(temp.top());
+        temp.pop();
+    }
 }

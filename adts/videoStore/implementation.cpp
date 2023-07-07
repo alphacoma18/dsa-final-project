@@ -196,5 +196,5 @@ void VideoStore::saveVideos() const
         curr = curr->getNext();
     }
     outputFile.close();
-    std::cout << "Videos saved successfully.";
+    std::cout << "Success: Videos saved.\n";
 }
