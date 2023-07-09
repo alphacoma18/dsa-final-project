@@ -77,7 +77,7 @@ VideoStore::VideoStore(std::string videosPath)
         std::getline(_ifstream, line);
         copyCount = std::stoi(line);
         std::getline(_ifstream, line);
-        addVideo(new Video(id, title, genre, production, copyCount));
+        addVideo(id, title, genre, production, copyCount);
     }
     _ifstream.close();
 };
@@ -117,8 +117,14 @@ bool VideoStore::videoExists(int id) const
     return true;
 };
 
-void VideoStore::addVideo(Video *video)
+void VideoStore::addVideo(int id, std::string title, std::string genre, std::string production, int copyCount)
 {
+    if (videoExists(id))
+    {
+        std::cout << "Error: Video already exists\n";
+        return;
+    }
+    Video *video = new Video(id, title, genre, production, copyCount);
     if (_head == nullptr)
     {
         _head = video;

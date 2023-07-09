@@ -113,7 +113,7 @@ void CustomerHandler::displayCustomerDetails(int id)
         return;
 
     std::cout << "-------------------------\n";
-    std::cout << "Customer ID" << customer->getId() << "\n";
+    std::cout << "Customer ID: " << customer->getId() << "\n";
     std::cout << "Name: " << customer->getName() << "\n";
     std::cout << "Address: " << customer->getAddress() << "\n";
     std::cout << "-------------------------\n";

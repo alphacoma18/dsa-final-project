@@ -94,24 +94,23 @@ Program::~Program()
     delete _rentalHandler;
 };
 
-void Program::chooseDisplay(){
+void Program::chooseDisplay()
+{
 
     int displayOption = -1;
-    std::cout <<"1. Display all Customers\n";
-    std::cout <<"2. Choose a Customer to display\n";
-    promptInt(displayOption, "Enter your choice: ", [](int input)
-              { return input < 1 || input > 2; });
-
-        if(displayOption == 1){
-            _customerHandler->displayCustomers();
-        }else if(displayOption == 2){
-            int customerId = -1;
-           promptInt(customerId, "Enter customer ID: ", [this](int input)
+    std::cout << "1. Display all Customers\n";
+    std::cout << "2. Choose a Customer to display\n";
+    promptInt(displayOption, "Enter your choice: ", [this](int input)
+              { return input == 1 || input == 2; });
+    if (displayOption == 1)
+        _customerHandler->displayCustomers();
+    else
+    {
+        int customerId = -1;
+        promptInt(customerId, "Enter customer ID: ", [this](int input)
                   { return !_customerHandler->customerExists(input); });
-
-                  _customerHandler->displayCustomerDetails(customerId);
-        }
-
+        _customerHandler->displayCustomerDetails(customerId);
+    }
 }
 void Program::customerPrompt()
 {
@@ -134,7 +133,7 @@ void Program::customerPrompt()
     }
     case 2:
     {
-        
+
         chooseDisplay();
         break;
     }
@@ -222,7 +221,7 @@ void Program::prompt()
             promptString(production, "Production: ");
             promptInt(copyCount, "Copy Count: ");
             ++_ids.videoId;
-            _videoStore->addVideo(new VideoStore::Video(_ids.videoId, title, genre, production, copyCount));
+            _videoStore->addVideo(_ids.videoId, title, genre, production, copyCount);
             system(CLEAR);
             std::cout << "Success: Video added.\n";
             break;

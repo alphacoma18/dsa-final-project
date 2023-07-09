@@ -40,7 +40,8 @@ public:
     ~VideoStore();
     Video *getVideo(int id) const;
     bool videoExists(int id) const;
-    void addVideo(Video *video);
+    // TODO:
+    void addVideo(int id, std::string title, std::string genre, std::string production, int copyCount);
     Video *rentVideo(int id);
     Video *returnVideo(int id) const;
     Video *getHead() const;
